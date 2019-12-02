@@ -37,7 +37,7 @@ machine = TocMachine(
 
 app = Flask(__name__, static_url_path="")
 
-'''
+
 # get channel_secret and channel_access_token from your environment variable
 channel_secret = os.getenv("LINE_CHANNEL_SECRET", None)
 channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
@@ -47,10 +47,10 @@ if channel_secret is None:
 if channel_access_token is None:
     print("Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.")
     sys.exit(1)
-'''
 
-channel_secret = '0dcdf1fe092618af697027ad0cb7d30f'
-channel_access_token='IS0QZQX+S1ZrepP2z070yW6zrHiGMFjxFqzJiNRSFrv9+N0aPYiaaKx6HhByyjo7jKBh1WR1mrkfGaNoGOfoLSU33IaHxF7/yuFHsy827Z9+76red4o18XFHYInjFZUZn9eedvmA+e+haofDhbTrQgdB04t89/1O/w1cDnyilFU='
+
+#channel_secret = '0dcdf1fe092618af697027ad0cb7d30f'
+#channel_access_token='IS0QZQX+S1ZrepP2z070yW6zrHiGMFjxFqzJiNRSFrv9+N0aPYiaaKx6HhByyjo7jKBh1WR1mrkfGaNoGOfoLSU33IaHxF7/yuFHsy827Z9+76red4o18XFHYInjFZUZn9eedvmA+e+haofDhbTrQgdB04t89/1O/w1cDnyilFU='
 
 line_bot_api = LineBotApi(channel_access_token)
 parser = WebhookParser(channel_secret)
