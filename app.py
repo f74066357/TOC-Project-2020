@@ -84,7 +84,7 @@ def callback():
 
 
 @app.route("/webhook", methods=["POST"])
-def webhook_handler():
+def webhook():
     signature = request.headers["X-Line-Signature"]
     # get request body as text
     body = request.get_data(as_text=True)
