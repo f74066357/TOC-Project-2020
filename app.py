@@ -14,21 +14,43 @@ load_dotenv()
 
 
 machine = TocMachine(
-    states=["user", "start1", "start2"],
+    states=["user", "menu", "game","guess","hit"],
     transitions=[
         {
             "trigger": "advance",
             "source": "user",
-            "dest": "start1",
-            "conditions": "is_going_to_start1",
+            "dest": "menu",
+            "conditions": "is_going_to_menu",
         },
         {
             "trigger": "advance",
-            "source": "user",
-            "dest": "start2",
-            "conditions": "is_going_to_start2",
+            "source": "menu",
+            "dest": "game",
+            "conditions": "is_going_to_game",
         },
-        {"trigger": "go_back", "source": ["start1", "start2"], "dest": "user"},
+        {
+            "trigger": "advance",
+            "source": "game",
+            "dest": "guess",
+            "conditions": "is_going_to_guess",
+        },
+        {
+            "trigger": "advance",
+            "source": "guess",
+            "dest": "guess",
+            "conditions": "guess_again",
+        },
+        {
+            "trigger": "advance",
+            "source": "guess",
+            "dest": "hit",
+            "conditions": "is_going_to_hit",
+        },
+        {
+            "trigger": "go_back", 
+            "source": "hit", 
+            "dest": "user"
+        },
     ],
     initial="user",
     auto_transitions=False,
@@ -48,13 +70,8 @@ if channel_access_token is None:
     print("Specify LINE_CHANNEL_ACCESS_TOKEN as environment variable.")
     sys.exit(1)
 
-
-#channel_secret = '0dcdf1fe092618af697027ad0cb7d30f'
-#channel_access_token='IS0QZQX+S1ZrepP2z070yW6zrHiGMFjxFqzJiNRSFrv9+N0aPYiaaKx6HhByyjo7jKBh1WR1mrkfGaNoGOfoLSU33IaHxF7/yuFHsy827Z9+76red4o18XFHYInjFZUZn9eedvmA+e+haofDhbTrQgdB04t89/1O/w1cDnyilFU='
-
 line_bot_api = LineBotApi(channel_access_token)
 parser = WebhookParser(channel_secret)
-
 
 @app.route("/callback", methods=["POST"])
 def callback():
