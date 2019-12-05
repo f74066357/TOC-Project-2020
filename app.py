@@ -9,12 +9,13 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 from fsm import TocMachine
 from utils import send_text_message
-
+from utils import send_menu
+from utils import send_image
+from utils import send_audio
 load_dotenv()
 
-
 machine = TocMachine(
-    states=["user", "menu", "game","guess","hit"],
+    states=["user", "menu", "game1","guess","hit","game2","song","right","wrong","addsong"],
     transitions=[
         {
             "trigger": "advance",
@@ -25,12 +26,24 @@ machine = TocMachine(
         {
             "trigger": "advance",
             "source": "menu",
-            "dest": "game",
-            "conditions": "is_going_to_game",
+            "dest": "game1",
+            "conditions": "is_going_to_game1",
         },
         {
             "trigger": "advance",
-            "source": "game",
+            "source": "menu",
+            "dest": "game2",
+            "conditions": "is_going_to_game2",
+        },
+        {
+            "trigger": "advance",
+            "source": "menu",
+            "dest": "addsong",
+            "conditions": "is_going_to_addsong",
+        },
+        {
+            "trigger": "advance",
+            "source": "game1",
             "dest": "guess",
             "conditions": "is_going_to_guess",
         },
@@ -47,10 +60,29 @@ machine = TocMachine(
             "conditions": "is_going_to_hit",
         },
         {
+            "trigger": "advance",
+            "source": "game2",
+            "dest": "song",
+            "conditions": "is_going_to_song",
+        },
+        {
+            "trigger": "advance",
+            "source": "song",
+            "dest": "wrong",
+            "conditions": "is_going_to_wrong",
+        },
+        {
+            "trigger": "advance",
+            "source": "song",
+            "dest": "right",
+            "conditions": "is_going_to_right",
+        },
+        {
             "trigger": "go_back", 
-            "source": "hit", 
+            "source": ["hit","right","wrong","addsong"],
             "dest": "user"
         },
+        
     ],
     initial="user",
     auto_transitions=False,

@@ -22,16 +22,16 @@ def send_menu(reply_token):
             actions=[
                 MessageTemplateAction(
                     label='終極密碼',
-                    text='game'
+                    text='game1'
                 ),
                 MessageTemplateAction(
-                    label='MODE2',
-                    text='transportation'
+                    label='猜歌',
+                    text='game2'
                 ),
-                URITemplateAction(
-                    label='uri',
-                    uri='https://moodle.ncku.edu.tw/mod/forum/discuss.php?d=403554'
-                )
+                MessageTemplateAction(
+                    label='增加歌單',
+                    text='addsong'
+                ),
             ]
         )
     )
@@ -39,15 +39,21 @@ def send_menu(reply_token):
     line_bot_api.reply_message(reply_token,message)
     return "OK"
 
-"""
-def send_image_url(id, img_url):
+
+def send_image(reply_token):
     message = ImageSendMessage(
-    original_content_url='https://example.com/original.jpg',
-    preview_image_url='https://example.com/preview.jpg'
+    original_content_url='https://assets.coingecko.com/coins/images/8914/large/boomfav.png?1562799810',
+    preview_image_url='https://assets.coingecko.com/coins/images/8914/large/boomfav.png?1562799810'
     )
-    line_bot_api.reply_message(event.reply_token, message)
+    line_bot_api = LineBotApi(channel_access_token)
+    line_bot_api.reply_message(reply_token, message)
     return "OK"
 
-def send_button_message(id, text, buttons):
-    pass
-"""
+def send_audio(reply_token,url):
+    message = AudioSendMessage(
+    original_content_url=url,
+    duration=60000  #60s
+    )
+    line_bot_api = LineBotApi(channel_access_token)
+    line_bot_api.reply_message(reply_token, message)
+    return "OK"
