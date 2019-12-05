@@ -4,6 +4,18 @@ from utils import send_text_message
 from utils import send_menu
 from utils import send_image
 from utils import send_audio
+from utils import push_message
+import sqlite3
+'''
+conn = sqlite3.connect('example.db')
+cursor = conn.cursor()
+# Insert a row of data
+cursor.execute("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")
+conn.commit()
+conn.close()
+'''
+
+
 finalnum=0
 highest=100
 lowest=1
@@ -12,7 +24,7 @@ songnum=0
 songlist=["點水","好不好","追光者"]
 songurl=["https://k007.kiwi6.com/hotlink/iyoge2q5gp/mp3", #點水
         "https://k007.kiwi6.com/hotlink/msuiwqghhk/mp3", #好不好
-        "https://hao.haolingsheng.com/ring/000/985/6da0d4255bd1d84d71a18ed859a7dac6.mp3" #追光者
+        "https://k007.kiwi6.com/hotlink/5fuwirarug/mp3" #追光者
         ]
 class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
@@ -29,7 +41,17 @@ class TocMachine(GraphMachine):
     def is_going_to_game2(self, event):
         text = event.message.text
         return text == "game2"
+
+    def is_going_to_addsong(self, event):
+        text = event.message.text
+        return text == "addsong"
+
+    def is_going_to_addname(self, event):
+        return True   
     
+    def is_going_to_addurl(self, event):
+        return True
+
     def is_going_to_guess(self, event):
         return True
 
@@ -81,6 +103,39 @@ class TocMachine(GraphMachine):
     def on_exit_menu(self, event):
         print("Leaving guess")
 
+    def on_enter_addsong(self, event):
+        print("I'm entering addsong")
+        reply_token = event.reply_token
+        send_text_message(reply_token,'請遵守下列規則:\n輸入正確歌曲名稱,\n歌曲url需為https開頭的mp3連結\nEX:https://www.sample-videos.com/audio/mp3/crowd-cheering.mp3\n\n請輸入歌曲名')
+
+    def on_exit_addsong(self, event):
+        print("Leaving addsong")
+
+    def on_enter_addname(self, event):
+        print("I'm entering addname")
+        text = event.message.text
+        global songlist
+        songlist.append(text)
+        reply_token = event.reply_token
+        send_text_message(reply_token,'請輸入歌曲連結')
+
+    def on_exit_addname(self, event):
+        print("Leaving addname")
+
+    def on_enter_addurl(self, event):
+        print("I'm entering addurl")
+        text = event.message.text
+        global songurl
+        songurl.append(text)
+        self.go_back()
+        reply_token = event.reply_token
+        send_text_message(reply_token,'添加歌曲成功')
+        id=event.source.user_id
+        push_message(id,"再次輸入menu選取你要的功能")
+
+    def on_exit_addurl(self):
+        print("Leaving addurl")
+
     def on_enter_hit(self, event):
         global highest
         global lowest
@@ -92,6 +147,8 @@ class TocMachine(GraphMachine):
         highest=100
         lowest=1
         guess=0
+        id=event.source.user_id
+        push_message(id,"再次輸入menu選取你要的功能")
         self.go_back()
 
     def on_exit_hit(self):
@@ -120,11 +177,13 @@ class TocMachine(GraphMachine):
         global songlist
         print("I'm entering game2")
         reply_token = event.reply_token
-        songnum=randint(0,2)
-        send_text_message(reply_token, "GAME2 START"+"\n"+str(songnum)+songlist[songnum]+"輸入任意鍵開始遊戲:")
+        songnum=randint(0,len(songlist))
+        send_text_message(reply_token,"GAME2 START"+"\n"+str(songlist)+songlist[songnum]+"輸入任意鍵開始遊戲:")
+        self.go_back()
 
     def on_exit_game2(self, event):
         print("Leaving game2")
+        
 
     def on_enter_guess(self, event):
         print("I'm entering guess")
@@ -148,6 +207,8 @@ class TocMachine(GraphMachine):
         print("I'm entering right")
         reply_token = event.reply_token
         send_text_message(reply_token,"you got it!")
+        id=event.source.user_id
+        push_message(id,"再次輸入menu選取你要的功能")
         self.go_back()
 
     def on_exit_right(self):
@@ -158,6 +219,8 @@ class TocMachine(GraphMachine):
         print("I'm entering right")
         reply_token = event.reply_token
         send_text_message(reply_token,"錯了 這是"+songlist[songnum])
+        id=event.source.user_id
+        push_message(id,"再次輸入menu選取你要的功能")
         self.go_back()
 
     def on_exit_wrong(self):

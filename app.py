@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
-
+from linebot import LineBotApi
 from fsm import TocMachine
 from utils import send_text_message
 from utils import send_menu
@@ -15,7 +15,7 @@ from utils import send_audio
 load_dotenv()
 
 machine = TocMachine(
-    states=["user", "menu", "game1","guess","hit","game2","song","right","wrong","addsong"],
+    states=["user", "menu", "game1","guess","hit","game2","song","right","wrong","addsong","addname","addurl"],
     transitions=[
         {
             "trigger": "advance",
@@ -78,8 +78,20 @@ machine = TocMachine(
             "conditions": "is_going_to_right",
         },
         {
+            "trigger": "advance",
+            "source": "addsong",
+            "dest": "addname",
+            "conditions": "is_going_to_addname",
+        },
+        {
+            "trigger": "advance",
+            "source": "addname",
+            "dest": "addurl",
+            "conditions": "is_going_to_addurl",
+        },
+        {
             "trigger": "go_back", 
-            "source": ["hit","right","wrong","addsong"],
+            "source": ["hit","right","wrong","addurl"],
             "dest": "user"
         },
         

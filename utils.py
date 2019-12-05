@@ -5,6 +5,9 @@ from linebot.models import *
 
 channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
 
+def push_message(id,message):
+    line_bot_api = LineBotApi(channel_access_token)
+    line_bot_api.push_message(id,TextSendMessage(text=message))
 
 def send_text_message(reply_token, text):
     line_bot_api = LineBotApi(channel_access_token)
