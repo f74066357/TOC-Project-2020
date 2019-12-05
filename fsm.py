@@ -5,26 +5,21 @@ from utils import send_menu
 from utils import send_image
 from utils import send_audio
 from utils import push_message
-import sqlite3
-'''
-conn = sqlite3.connect('example.db')
-cursor = conn.cursor()
-# Insert a row of data
-cursor.execute("INSERT INTO stocks VALUES ('2006-01-05','BUY','RHAT',100,35.14)")
-conn.commit()
-conn.close()
-'''
-
 
 finalnum=0
 highest=100
 lowest=1
 guess=0
 songnum=0
-songlist=["點水","好不好","追光者"]
-songurl=["https://k007.kiwi6.com/hotlink/iyoge2q5gp/mp3", #點水
+songlist=["點水","好不好","追光者","愛著愛著就永遠","我們不一樣","告白氣球","等你下課"]
+songurl=[
+        "https://k007.kiwi6.com/hotlink/iyoge2q5gp/mp3", #點水
         "https://k007.kiwi6.com/hotlink/msuiwqghhk/mp3", #好不好
-        "https://k007.kiwi6.com/hotlink/5fuwirarug/mp3" #追光者
+        "https://k007.kiwi6.com/hotlink/5fuwirarug/mp3", #追光者
+        "https://k007.kiwi6.com/hotlink/9lts8qybr4/mp3", #愛著愛著就永遠
+        "https://k007.kiwi6.com/hotlink/39sbn7xkxf/mp3", #我們不一樣
+        "https://k007.kiwi6.com/hotlink/8f4ofi1hnq/mp3", #告白氣球
+        "https://k007.kiwi6.com/hotlink/nlh96ql89f/mp3"  #等你下課
         ]
 class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
@@ -129,7 +124,7 @@ class TocMachine(GraphMachine):
         songurl.append(text)
         self.go_back()
         reply_token = event.reply_token
-        send_text_message(reply_token,'添加歌曲成功')
+        send_text_message(reply_token,'添加歌曲成功\n目前歌曲:'+str(songlist))
         id=event.source.user_id
         push_message(id,"再次輸入menu選取你要的功能")
 
