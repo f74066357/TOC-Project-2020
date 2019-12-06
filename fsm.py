@@ -141,9 +141,8 @@ class TocMachine(GraphMachine):
         print("I'm entering hit")
         reply_token = event.reply_token
         send_image(reply_token)
-        #send_text_message(reply_token,"you got it!")
         username=display_name(event)
-        push_message(event,username+" 贏得了勝利 恭喜!!!")
+        push_message(event,username+" 引爆了炸彈!!")
         highest=100
         lowest=1
         guess=0
