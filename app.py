@@ -15,7 +15,7 @@ from utils import send_audio
 load_dotenv()
 
 machine = TocMachine(
-    states=["user", "menu", "game1","guess","hit","game2","song","right","wrong","addsong","addname","addurl"],
+    states=["user", "menu", "game1","guess","hit","game2","song","right","wrong","again","addsong","addname","addurl"],
     transitions=[
         {
             "trigger": "advance",
@@ -68,6 +68,30 @@ machine = TocMachine(
         {
             "trigger": "advance",
             "source": "song",
+            "dest": "wrong",
+            "conditions": "is_going_to_wrong",
+        },
+        {
+            "trigger": "advance",
+            "source": "song",
+            "dest": "again",
+            "conditions": "is_going_to_songagain",
+        },
+        {
+            "trigger": "advance",
+            "source": "again",
+            "dest": "again",
+            "conditions": "is_going_to_songagain",
+        },
+        {
+            "trigger": "advance",
+            "source": "again",
+            "dest": "right",
+            "conditions": "is_going_to_right",
+        },
+        {
+            "trigger": "advance",
+            "source": "again",
             "dest": "wrong",
             "conditions": "is_going_to_wrong",
         },

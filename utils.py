@@ -5,8 +5,12 @@ from linebot.models import *
 
 channel_access_token = os.getenv("LINE_CHANNEL_ACCESS_TOKEN", None)
 
-def push_message(id,message):
+def push_message(event,message):
     line_bot_api = LineBotApi(channel_access_token)
+    if(event.source.type=='group'):
+        id=event.source.group_id
+    if(event.source.type=='user'):
+        id=event.source.user_id
     line_bot_api.push_message(id,TextSendMessage(text=message))
 
 def send_text_message(reply_token, text):
@@ -14,6 +18,11 @@ def send_text_message(reply_token, text):
     line_bot_api.reply_message(reply_token, TextSendMessage(text=text))
 
     return "OK"
+
+def display_name(event):
+    line_bot_api = LineBotApi(channel_access_token)
+    profile = line_bot_api.get_profile(event.source.user_id)
+    return profile.display_name
 
 def send_menu(reply_token):
     message = TemplateSendMessage(

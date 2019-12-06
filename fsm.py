@@ -5,7 +5,7 @@ from utils import send_menu
 from utils import send_image
 from utils import send_audio
 from utils import push_message
-
+from utils import display_name
 finalnum=0
 highest=100
 lowest=1
@@ -83,6 +83,10 @@ class TocMachine(GraphMachine):
         return text==songlist[songnum]
 
     def is_going_to_wrong(self, event):
+        text = event.message.text
+        return text=="_不猜了"
+
+    def is_going_to_songagain(self, event):
         global songnum
         global songlist
         text = event.message.text
@@ -125,8 +129,7 @@ class TocMachine(GraphMachine):
         self.go_back()
         reply_token = event.reply_token
         send_text_message(reply_token,'添加歌曲成功\n目前歌曲:'+str(songlist))
-        id=event.source.user_id
-        push_message(id,"再次輸入menu選取你要的功能")
+        push_message(event,"再次輸入menu選取要的功能吧><")
 
     def on_exit_addurl(self):
         print("Leaving addurl")
@@ -139,11 +142,12 @@ class TocMachine(GraphMachine):
         reply_token = event.reply_token
         send_image(reply_token)
         #send_text_message(reply_token,"you got it!")
+        username=display_name(event)
+        push_message(event,username+" 贏得了勝利 恭喜!!!")
         highest=100
         lowest=1
         guess=0
-        id=event.source.user_id
-        push_message(id,"再次輸入menu選取你要的功能")
+        push_message(event,"再次輸入menu選取要的功能吧><")
         self.go_back()
 
     def on_exit_hit(self):
@@ -162,7 +166,8 @@ class TocMachine(GraphMachine):
         global finalnum
         finalnum=randint(1,100)
         reply_token = event.reply_token
-        send_text_message(reply_token, "GAME START" + str(finalnum)+'\n'+"輸入任意鍵開始遊戲:")
+        username=display_name(event)
+        send_text_message(reply_token, username+"發起了終極密碼的挑戰" + str(finalnum)+'\n'+"輸入任意鍵開始遊戲:")
 
     def on_exit_game1(self, event):
         print("Leaving game1")
@@ -198,12 +203,21 @@ class TocMachine(GraphMachine):
     def on_exit_song(self, event):
         print("Leaving song")
 
+    def on_enter_again(self, event):
+        print("I'm entering again")
+        username=display_name(event)
+        reply_token = event.reply_token
+        send_text_message(reply_token, username+'答錯啦 再猜猜看')
+
+    def on_exit_again(self, event):
+        print("Leaving again")
+
     def on_enter_right(self, event):
         print("I'm entering right")
+        username=display_name(event)
         reply_token = event.reply_token
-        send_text_message(reply_token,"you got it!")
-        id=event.source.user_id
-        push_message(id,"再次輸入menu選取你要的功能")
+        send_text_message(reply_token,username+" 贏得了勝利 恭喜!!!")
+        push_message(event,"再次輸入menu選取要的功能吧><")
         self.go_back()
 
     def on_exit_right(self):
@@ -211,12 +225,10 @@ class TocMachine(GraphMachine):
 
     def on_enter_wrong(self, event):
         global songnum
-        print("I'm entering right")
+        print("I'm entering wrong")
         reply_token = event.reply_token
-        send_text_message(reply_token,"錯了 這是"+songlist[songnum])
-        id=event.source.user_id
-        push_message(id,"再次輸入menu選取你要的功能")
-        self.go_back()
+        send_text_message(reply_token,"這首歌是 "+songlist[songnum])
+        push_message(event,"再次輸入menu選取要的功能吧><")
 
     def on_exit_wrong(self):
         print("Leaving wrong")
