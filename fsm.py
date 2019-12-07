@@ -66,7 +66,10 @@ class TocMachine(GraphMachine):
         global highest
         global lowest
         text = event.message.text
-        guess = int(text) #把字串轉換成整數
+        try:
+            guess = int(text) #把字串轉換成整數
+        except:
+            return False
         if(guess>=lowest and guess<=highest):
             if(guess>finalnum):
                 highest=guess
@@ -84,13 +87,13 @@ class TocMachine(GraphMachine):
 
     def is_going_to_wrong(self, event):
         text = event.message.text
-        return text=="_不猜了"
+        return text=="不猜了"
 
     def is_going_to_songagain(self, event):
         global songnum
         global songlist
         text = event.message.text
-        return text!=songlist[songnum]
+        return text!="不猜了"and text!=songlist[songnum]
 
     def on_enter_guess(self, event):
         global highest
@@ -105,7 +108,7 @@ class TocMachine(GraphMachine):
     def on_enter_addsong(self, event):
         print("I'm entering addsong")
         reply_token = event.reply_token
-        send_text_message(reply_token,'請遵守下列規則:\n輸入正確歌曲名稱,\n歌曲url需為https開頭的mp3連結\nEX:https://www.sample-videos.com/audio/mp3/crowd-cheering.mp3\n\n請輸入歌曲名')
+        send_text_message(reply_token,'請遵守下列規則:\n1.輸入正確歌曲名稱,\n2.歌曲長度在1分鐘內\n3.歌曲url需為https開頭的mp3連結\nEX:https://www.sample-videos.com/audio/mp3/crowd-cheering.mp3\n\n請輸入歌曲名')
 
     def on_exit_addsong(self, event):
         print("Leaving addsong")
@@ -166,7 +169,7 @@ class TocMachine(GraphMachine):
         finalnum=randint(1,100)
         reply_token = event.reply_token
         username=display_name(event)
-        send_text_message(reply_token, username+"發起了終極密碼的挑戰" + str(finalnum)+'\n'+"輸入任意鍵開始遊戲:")
+        send_text_message(reply_token, username+"發起了終極密碼的挑戰\n輸入任意鍵開始遊戲:")
 
     def on_exit_game1(self, event):
         print("Leaving game1")
@@ -176,8 +179,9 @@ class TocMachine(GraphMachine):
         global songlist
         print("I'm entering game2")
         reply_token = event.reply_token
-        songnum=randint(0,len(songlist))
-        send_text_message(reply_token,"GAME2 START"+"\n"+str(songlist)+songlist[songnum]+"輸入任意鍵開始遊戲:")
+        songnum=randint(0,len(songlist)-1)
+        username=display_name(event)
+        send_text_message(reply_token,username+"發起了猜歌遊戲!"+"\n輸入\"不猜了\"遊戲結束 公布正解\n輸入任意鍵開始遊戲:")
         self.go_back()
 
     def on_exit_game2(self, event):
@@ -194,6 +198,8 @@ class TocMachine(GraphMachine):
 
     def on_enter_song(self, event):
         print("I'm entering song")
+        username=display_name(event)
+        print(username)
         global songnum
         global songurl
         reply_token = event.reply_token
@@ -205,8 +211,9 @@ class TocMachine(GraphMachine):
     def on_enter_again(self, event):
         print("I'm entering again")
         username=display_name(event)
+        print(username)
         reply_token = event.reply_token
-        send_text_message(reply_token, username+'答錯啦 再猜猜看')
+        send_text_message(reply_token,username+'答錯啦 再猜猜看')
 
     def on_exit_again(self, event):
         print("Leaving again")
@@ -226,7 +233,7 @@ class TocMachine(GraphMachine):
         global songnum
         print("I'm entering wrong")
         reply_token = event.reply_token
-        send_text_message(reply_token,"這首歌是 "+songlist[songnum])
+        send_text_message(reply_token,"遊戲結束~這首歌是 "+songlist[songnum])
         push_message(event,"再次輸入menu選取要的功能吧><")
         self.go_back()
 
