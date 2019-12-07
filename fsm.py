@@ -228,6 +228,7 @@ class TocMachine(GraphMachine):
         reply_token = event.reply_token
         send_text_message(reply_token,"這首歌是 "+songlist[songnum])
         push_message(event,"再次輸入menu選取要的功能吧><")
+        self.go_back()
 
     def on_exit_wrong(self):
         print("Leaving wrong")
