@@ -21,8 +21,8 @@ songurl=[
         "https://k007.kiwi6.com/hotlink/8f4ofi1hnq/mp3", #告白氣球
         "https://k007.kiwi6.com/hotlink/nlh96ql89f/mp3", #等你下課
         "https://k007.kiwi6.com/hotlink/6ig3r3cwfd/mp3", #句號
-        "https://k007.kiwi6.com/hotlink/j8cjy4o873/mp3" #怪美的
-        "https://k007.kiwi6.com/hotlink/iibvj03ewe/mp3" #浪費
+        "https://k007.kiwi6.com/hotlink/j8cjy4o873/mp3", #怪美的
+        "https://k007.kiwi6.com/hotlink/iibvj03ewe/mp3"  #浪費
         ]
 class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
