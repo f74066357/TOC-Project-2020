@@ -8,6 +8,9 @@
 @670krxjr     
 ![image](https://github.com/f74066357/TOC-Project-2020/blob/master/670krxjr.png)
 
+## usage
+https://hackmd.io/@3V7qO4jNTmapv5oZz4zgpg/BkkGR-pTS
+請見連結"usage"  
 
 ## purpose
 聚會上炒熱氣氛的經典小遊戲，無須下載即可在line上使用是最大的特點
