@@ -11,7 +11,7 @@ highest=100
 lowest=1
 guess=0
 songnum=0
-songlist=["點水","好不好","追光者","愛著愛著就永遠","我們不一樣","告白氣球","等你下課"]
+songlist=["點水","好不好","追光者","愛著愛著就永遠","我們不一樣","告白氣球","等你下課","句號","怪美的","浪費"]
 songurl=[
         "https://k007.kiwi6.com/hotlink/iyoge2q5gp/mp3", #點水
         "https://k007.kiwi6.com/hotlink/msuiwqghhk/mp3", #好不好
@@ -19,7 +19,10 @@ songurl=[
         "https://k007.kiwi6.com/hotlink/9lts8qybr4/mp3", #愛著愛著就永遠
         "https://k007.kiwi6.com/hotlink/39sbn7xkxf/mp3", #我們不一樣
         "https://k007.kiwi6.com/hotlink/8f4ofi1hnq/mp3", #告白氣球
-        "https://k007.kiwi6.com/hotlink/nlh96ql89f/mp3"  #等你下課
+        "https://k007.kiwi6.com/hotlink/nlh96ql89f/mp3", #等你下課
+        "https://k007.kiwi6.com/hotlink/6ig3r3cwfd/mp3", #句號
+        "https://k007.kiwi6.com/hotlink/j8cjy4o873/mp3" #怪美的
+        "https://k007.kiwi6.com/hotlink/iibvj03ewe/mp3" #浪費
         ]
 class TocMachine(GraphMachine):
     def __init__(self, **machine_configs):
@@ -233,7 +236,7 @@ class TocMachine(GraphMachine):
         global songnum
         print("I'm entering wrong")
         reply_token = event.reply_token
-        send_text_message(reply_token,"遊戲結束~這首歌是 "+songlist[songnum])
+        send_text_message(reply_token,"遊戲結束~這首歌是 "+songlist[songnum]+" 啦")
         push_message(event,"再次輸入menu選取要的功能吧><")
         self.go_back()
 
