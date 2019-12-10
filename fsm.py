@@ -111,7 +111,7 @@ class TocMachine(GraphMachine):
     def on_enter_addsong(self, event):
         print("I'm entering addsong")
         reply_token = event.reply_token
-        send_text_message(reply_token,'請遵守下列規則:\n1.輸入正確歌曲名稱,\n2.歌曲長度在1分鐘內\n3.歌曲url需為https開頭的mp3連結\nEX:https://www.sample-videos.com/audio/mp3/crowd-cheering.mp3\n\n請輸入歌曲名')
+        send_text_message(reply_token,'請遵守下列規則:\n1.輸入正確歌曲名稱,\n2.歌曲長度在1分鐘內\n3.歌曲url需為https開頭的mp3連結\nEX:https://www.sample-videos.com/audio/mp3/crowd-cheering.mp3\n\n請輸入歌曲名:')
 
     def on_exit_addsong(self, event):
         print("Leaving addsong")
